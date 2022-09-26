@@ -1,0 +1,101 @@
+<h1 class="component-title">New Insurance</h1>
+
+<form action="" [formGroup]="insuranceForm" (ngSubmit)="getInsurancedata()">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <mat-form-field appearance="outline">
+                    <mat-label>PAN</mat-label>
+                    <input matInput required maxlength="16" formControlName='pan'>
+                </mat-form-field>
+                <div *ngIf="getError('pan', 'pattern')" class="text-danger">
+                    Hibás kártya szám
+                </div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Customer ID</mat-label>
+                    <input matInput formControlName='custId' formControlName='custId'>
+                </mat-form-field>
+                <div *ngIf="getError('custId', 'pattern')" class="text-danger">
+                    Nem megfelelő customer ID
+                </div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Customer's name</mat-label>
+                    <input matInput formControlName="custName">
+                </mat-form-field>
+            </div>
+            <div class="col-sm">
+                <mat-form-field appearance="outline">
+                    <mat-label>Address</mat-label>
+                    <input matInput formControlName="custAddress">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Postal address</mat-label>
+                    <input matInput formControlName="postAddress">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>ID card number</mat-label>
+                    <input formControlName="idCard" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col-sm">
+                <mat-form-field appearance="outline">
+                    <mat-label>ID card expire day</mat-label>
+                    <input matInput [matDatepicker]="expire" formControlName="expire">
+                    <mat-datepicker-toggle [for]="expire" matSuffix></mat-datepicker-toggle>
+                    <mat-datepicker #expire></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Phone number</mat-label>
+                    <input type="number" matInput formControlName="phoneNumber">
+                    <mat-icon matSuffix>phone</mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Gender</mat-label>
+                    <mat-select formControlName="gender">
+                        <mat-option *ngFor="let gender of genders" [value]="gender.value">
+                            {{gender.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-raised-button (click)="clearForm()">Clear Form</button>
+                <button mat-raised-button color="primary" type="submit">Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+<hr>
+
+<form action="" [formGroup]="applyForm">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <mat-form-field appearance="outline">
+                    <mat-label>Insurance Type</mat-label>
+                    <mat-select formControlName="type">
+                        <mat-option *ngFor="let type of insuranceType" [value]="type.value">
+                            {{type.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Insurance Start Date</mat-label>
+                    <input matInput [matDatepicker]="start" formControlName="startDay">
+                    <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+                    <mat-datepicker disabled="false" #start></mat-datepicker>
+                </mat-form-field>
+                <label id="winter-sport-coverage">Winter sport coverage</label>
+                <mat-radio-group aria-label="Winter sport coverage" class="winter-sport">
+                    <mat-radio-button value="1">Enable</mat-radio-button>
+                    <mat-radio-button value="2">Disable</mat-radio-button>
+                </mat-radio-group>
+                <button mat-raised-button color="primary" type="submit">Save</button>
+            </div>
+            <div class="col-sm">
+                <span></span>
+            </div>
+            <div class="col-sm">
+                <span></span>
+            </div>
+        </div>
+    </div>
+</form>
