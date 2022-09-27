@@ -52,7 +52,7 @@ export class NewInsuranceComponent implements OnInit, OnDestroy, AfterViewInit {
     return formControl.errors?.[errorName];
   };
 
-  getInsurancedata() {
+  getInsuranceData() {
     this.insuranceService.getCardData().subscribe(data => {
       const formControl = this.insuranceForm.controls;
       let pan = this.insuranceForm.get('pan')?.value as string;
