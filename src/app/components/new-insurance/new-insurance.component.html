@@ -80,6 +80,7 @@
                 <mat-form-field appearance="outline">
                     <mat-label>Insurance Start Date</mat-label>
                     <input matInput [matDatepicker]="start" formControlName="startDay">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
                     <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
                     <mat-datepicker #start></mat-datepicker>
                 </mat-form-field>
