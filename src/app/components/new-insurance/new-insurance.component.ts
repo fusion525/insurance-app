@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NewInsuranceServiceService, InsuranceData, InsuranceType } from 'src/app/services/new-insurance-service.service';
+import {MatDialog} from '@angular/material/dialog';
+
+import { DialogComponent } from '../dialog/dialog.component';
 
 interface Gender {
   value: string;
@@ -15,7 +18,8 @@ interface Gender {
 export class NewInsuranceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
-    private insuranceService: NewInsuranceServiceService
+    private insuranceService: NewInsuranceServiceService,
+    private dialog: MatDialog,
   ) { }
 
   genders: Gender[] = [
@@ -39,9 +43,9 @@ export class NewInsuranceComponent implements OnInit, OnDestroy, AfterViewInit {
   });
 
   applyForm = new FormGroup({
-    type: new FormControl('', [Validators.required]),
+    type: new FormControl({value: '', disabled: true}, [Validators.required]),
     startDay: new FormControl({ value: '', disabled: true }, [Validators.required]),
-    extra: new FormGroup('', [Validators.required])
+    extra: new FormControl({ value: '', disabled: true }, [Validators.required])
   })
 
   getError(path: string, errorName: string) {
@@ -52,21 +56,35 @@ export class NewInsuranceComponent implements OnInit, OnDestroy, AfterViewInit {
     return formControl.errors?.[errorName];
   };
 
-  getInsuranceData() {
-    this.insuranceService.getCardData().subscribe(data => {
-      const formControl = this.insuranceForm.controls;
-      let pan = this.insuranceForm.get('pan')?.value as string;
-      let found = {} as InsuranceData; 
-      
-      data.forEach(element => {
-        if (element.pan === pan) {
-          found = element;
-        }
-      });
+  enableApplyFields() {
+    const formControl = this.applyForm.controls;
 
-      (Object.keys(formControl) as (keyof typeof formControl)[]).forEach(key => {
-        formControl[key].setValue((found[key]));
-      });
+    (Object.keys(formControl) as (keyof typeof formControl)[]).forEach(
+      key => {
+        formControl[key].enable();
+      }
+    );
+  }
+
+  getInsuranceData() {
+    this.insuranceService.getCardData().subscribe({
+      next: data => {
+        const formControl = this.insuranceForm.controls;
+        let pan = this.insuranceForm.get('pan')?.value as string;
+        let found = {} as InsuranceData;
+  
+        data.forEach(element => {
+          if (element.pan === pan) {
+            found = element;
+          }
+        });
+  
+        (Object.keys(formControl) as (keyof typeof formControl)[]).forEach(key => {
+          formControl[key].setValue((found[key]));
+        });
+      },
+      complete: () => this.enableApplyFields(),
+      error: (err) =>  this.dialog.open(DialogComponent,{data: err})
     });
 
   }

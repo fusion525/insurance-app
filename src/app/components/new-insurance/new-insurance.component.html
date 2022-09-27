@@ -81,10 +81,10 @@
                     <mat-label>Insurance Start Date</mat-label>
                     <input matInput [matDatepicker]="start" formControlName="startDay">
                     <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
-                    <mat-datepicker disabled="false" #start></mat-datepicker>
+                    <mat-datepicker #start></mat-datepicker>
                 </mat-form-field>
                 <label id="winter-sport-coverage">Winter sport coverage</label>
-                <mat-radio-group aria-label="Winter sport coverage" class="winter-sport">
+                <mat-radio-group formControlName="extra" aria-label="Winter sport coverage" class="winter-sport">
                     <mat-radio-button value="1">Enable</mat-radio-button>
                     <mat-radio-button value="2">Disable</mat-radio-button>
                 </mat-radio-group>
