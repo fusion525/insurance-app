@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { lastValueFrom, of } from 'rxjs';
 import { NewInsuranceServiceService, InsuranceData, InsuranceType } from 'src/app/services/new-insurance-service.service';
 
 interface Gender {
@@ -13,7 +12,7 @@ interface Gender {
   templateUrl: './new-insurance.component.html',
   styleUrls: ['./new-insurance.component.scss']
 })
-export class NewInsuranceComponent implements OnInit, OnDestroy {
+export class NewInsuranceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private insuranceService: NewInsuranceServiceService
@@ -34,14 +33,14 @@ export class NewInsuranceComponent implements OnInit, OnDestroy {
     custAddress: new FormControl({ value: '', disabled: true }),
     postAddress: new FormControl({ value: '', disabled: true }),
     idCard: new FormControl({ value: '', disabled: true }),
-    expire: new FormControl({value: '', disabled: true}),
+    expire: new FormControl({ value: '', disabled: true }),
     phoneNumber: new FormControl({ value: '', disabled: true }),
     gender: new FormControl({ value: '', disabled: true })
   });
 
   applyForm = new FormGroup({
     type: new FormControl('', [Validators.required]),
-    startDay: new FormControl({value: '', disabled: true}, [Validators.required]),
+    startDay: new FormControl({ value: '', disabled: true }, [Validators.required]),
     extra: new FormGroup('', [Validators.required])
   })
 
@@ -53,24 +52,22 @@ export class NewInsuranceComponent implements OnInit, OnDestroy {
     return formControl.errors?.[errorName];
   };
 
-  async getInsurancedata() {
-    const insuranceData = await lastValueFrom(this.insuranceService.getCardData());
-    const formControl = this.insuranceForm.controls;
-    let pan = this.insuranceForm.get('pan')?.value as string;
+  getInsurancedata() {
+    this.insuranceService.getCardData().subscribe(data => {
+      const formControl = this.insuranceForm.controls;
+      let pan = this.insuranceForm.get('pan')?.value as string;
+      let found: InsuranceData = { pan: '', custId: '', custName: '', custAddress: '', postAddress: '', idCard: '', expire: '', phoneNumber: '', gender: '' };
 
-    let found: InsuranceData = { pan: '', custId: '', custName: '', custAddress: '', postAddress: '', idCard: '', expire: '', phoneNumber: '', gender: '' };
+      data.forEach(element => {
+        if (element.pan === pan) {
+          found = element;
+        }
+      });
 
-    for (let el of insuranceData) {
-      if (el.pan === pan) {
-        found = el;
-      }
-    }
-
-    let k: keyof InsuranceData;
-
-    for (k in this.insuranceForm.controls) {
-      (formControl)[k].setValue((found)[k]);
-    }
+      (Object.keys(formControl) as (keyof typeof formControl)[]).forEach(key => {
+        formControl[key].setValue((found[key]));
+      });
+    });
 
   }
 
@@ -78,22 +75,18 @@ export class NewInsuranceComponent implements OnInit, OnDestroy {
     this.insuranceForm.reset();
   }
 
-  async getInsuranceTypes(): Promise<InsuranceType[]> {
-    return await lastValueFrom(this.insuranceService.getInsuranceType());
-  }
-
-  loadInsuranceTypes(data: Promise<InsuranceType[]>) {
-    data.then(value => value.forEach(value => {
-      this.insuranceType.push(value);
-    }))
-  }
-
   ngOnInit(): void {
-    this.loadInsuranceTypes(this.getInsuranceTypes());
+
   }
 
   ngOnDestroy(): void {
 
+  }
+
+  ngAfterViewInit(): void {
+    this.insuranceService.getInsuranceType().subscribe(data => {
+      this.insuranceType = data;
+    });
   }
 
 }
