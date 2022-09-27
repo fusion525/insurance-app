@@ -56,8 +56,8 @@ export class NewInsuranceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.insuranceService.getCardData().subscribe(data => {
       const formControl = this.insuranceForm.controls;
       let pan = this.insuranceForm.get('pan')?.value as string;
-      let found: InsuranceData = { pan: '', custId: '', custName: '', custAddress: '', postAddress: '', idCard: '', expire: '', phoneNumber: '', gender: '' };
-
+      let found = {} as InsuranceData; 
+      
       data.forEach(element => {
         if (element.pan === pan) {
           found = element;
