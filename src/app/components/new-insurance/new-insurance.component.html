@@ -1,6 +1,9 @@
 <h1 class="component-title">New Insurance</h1>
 
+<mat-stepper orientation="vertical" #stepper>
+<mat-step [stepControl]="insuranceForm">
 <form action="" [formGroup]="insuranceForm" (ngSubmit)="getInsuranceData()">
+    <ng-template matStepLabel>Fill out customer data</ng-template>
     <div class="container">
         <div class="row">
             <div class="col-sm">
@@ -63,9 +66,12 @@
         </div>
     </div>
 </form>
+</mat-step>
 <hr>
 
+<mat-step [stepControl]="applyForm">
 <form action="" [formGroup]="applyForm">
+    <ng-template matStepLabel>Fill out insurance data</ng-template>
     <div class="container">
         <div class="row">
             <div class="col-sm">
@@ -100,3 +106,5 @@
         </div>
     </div>
 </form>
+</mat-step>
+</mat-stepper>
