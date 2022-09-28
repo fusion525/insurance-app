@@ -15,6 +15,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 //End of Material Modules
 
@@ -26,6 +28,7 @@ import { NewInsuranceComponent } from './components/new-insurance/new-insurance.
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { ListComponent } from './components/list/list.component';
 
 
 
@@ -35,7 +38,8 @@ import { DialogComponent } from './components/dialog/dialog.component';
     HomeComponent,
     NewInsuranceComponent,
     NavBarComponent,
-    DialogComponent
+    DialogComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +57,9 @@ import { DialogComponent } from './components/dialog/dialog.component';
     MatIconModule,
     ReactiveFormsModule,
     MatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule,
+    MatSortModule
   ],
   providers: [
     {
