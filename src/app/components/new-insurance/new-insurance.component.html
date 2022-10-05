@@ -70,7 +70,7 @@
 <hr>
 
 <mat-step [stepControl]="applyForm">
-<form action="" [formGroup]="applyForm">
+<form action="" [formGroup]="applyForm" (ngSubmit)="postInsuranceData()">
     <ng-template matStepLabel>Fill out insurance data</ng-template>
     <div class="container">
         <div class="row">

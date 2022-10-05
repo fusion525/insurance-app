@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 
 export interface InsuranceData {
@@ -19,6 +19,13 @@ export interface InsuranceType {
   value: string
 }
 
+export interface NewInsurance {
+  insuType: string,
+  startDay: string,
+  extra: string,
+  pan: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -34,6 +41,22 @@ export class NewInsuranceServiceService {
   public getInsuranceType(): Observable<InsuranceType[]> {
     return ajax('http://localhost:3000/insuranceType').pipe(
       map(response => response.response as InsuranceType[])
+    );
+  }
+
+  public postInsuranceData(data: NewInsurance): Observable<NewInsurance> {
+    return ajax({
+      url: 'http://localhost:3000/newinsurances',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'rxjs-custom-header': 'Rxjs'
+      },
+      body: {
+        data
+      }
+    }).pipe(
+      map(response => response.response as NewInsurance)
     );
   }
 
